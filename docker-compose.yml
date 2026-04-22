@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5202:5202"
+    environment:
+      - DB_HOST=192.168.1.108
+      - DB_PORT=3306
+      - DB_USER=chenwei
+      - DB_PASSWORD=761211
+      - DB_NAME=shanghai_library
+      - API_PORT=5202
+    container_name: shanghai-library-backend
+    restart: unless-stopped
+    networks:
+      - shanghai-library-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5102:80"
+    depends_on:
+      - backend
+    container_name: shanghai-library-frontend
+    restart: unless-stopped
+    networks:
+      - shanghai-library-network
+
+networks:
+  shanghai-library-network:
+    driver: bridge
