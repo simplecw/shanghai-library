@@ -1,0 +1,34 @@
+# Docker Compose 配置
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5202:5202"
+    environment:
+      - DB_HOST=${DB_HOST:-127.0.0.1}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_USER=${DB_USER:-shanghai_library}
+      - DB_PASSWORD=${DB_PASSWORD:?请设置 DB_PASSWORD}
+      - DB_NAME=${DB_NAME:-shanghai_library}
+      - API_PORT=5202
+    container_name: shanghai-library-backend
+    restart: unless-stopped
+    networks:
+      - shanghai-library-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5102:80"
+    depends_on:
+      - backend
+    container_name: shanghai-library-frontend
+    restart: unless-stopped
+    networks:
+      - shanghai-library-network
+
+networks:
+  shanghai-library-network:
+    driver: bridge

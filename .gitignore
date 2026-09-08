@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+node_modules/
+.npm-cache/
+dist/
+.idea/
+.vscode/
+.DS_Store
+.tmp/
+.publish/
+99.references/
