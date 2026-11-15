@@ -8,6 +8,8 @@
 - `02.design/`：架构、接口与数据库设计
 - `03.src/`：前端、后端、SQL 和容器编排源码
 - `04.test/backend/`：后端自动化测试
+- `.agents/skills/shanghai-library-books/`：书籍管理 agent skill（ZCode 技能，基于 REST API 管理书籍数据）
+- `deployment/`：agent skill 的交付包（zip）
 - `99.references/`：本地参考资料，不提交到 Git
 
 ## 本地运行
@@ -17,15 +19,25 @@
 3. 在 `03.src` 下执行 `docker compose --env-file .env up --build`。
 4. 访问前端 `http://localhost:5102`，API 文档位于 `http://localhost:5202/docs`。
 
-## 后端测试
+## 自动化测试
+
+后端测试（覆盖率 100%）：
 
 ```powershell
 cd 03.src\backend
 py -3 -m pip install -r requirements-dev.txt
-py -3 -m pytest ..\..\04.test\backend --cov=app --cov-report=term-missing --cov-fail-under=95
+py -3 -m pytest ..\..\04.test\backend --cov=app --cov-report=term-missing --cov-fail-under=100
 ```
 
-测试使用内存 SQLite，与实际 MySQL 数据隔离，不需要真实凭证或数据库服务。
+前端测试（覆盖率 100%，vitest + Testing Library）：
+
+```powershell
+cd 03.src\frontend
+npm install
+npm run test:coverage
+```
+
+后端测试使用内存 SQLite，与实际 MySQL 数据隔离，不需要真实凭证或数据库服务；前端测试在 jsdom 中运行，不发起真实网络请求。
 
 ## 安全约定
 

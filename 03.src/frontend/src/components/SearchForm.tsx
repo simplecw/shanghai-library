@@ -8,6 +8,10 @@ interface SearchFormProps {
   onReset: () => void
 }
 
+// 按选项文本过滤（导出以便单元测试覆盖空选项分支）
+export const filterOptionByText = (input: string, option?: { children?: React.ReactNode }) =>
+  (option?.children as unknown as string)?.toLowerCase().includes(input.toLowerCase()) ?? false
+
 const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onReset }) => {
   const [form] = Form.useForm()
   const [categories, setCategories] = useState<string[]>([])
@@ -120,9 +124,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onReset }) => {
               placeholder="请选择类别"
               allowClear
               showSearch
-              filterOption={(input, option) =>
-                (option?.children as unknown as string)?.toLowerCase().includes(input.toLowerCase())
-              }
+              filterOption={filterOptionByText}
               loading={loading}
             >
               {categories.map(cat => (
@@ -137,9 +139,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onReset }) => {
               placeholder="请选择小类别"
               allowClear
               showSearch
-              filterOption={(input, option) =>
-                (option?.children as unknown as string)?.toLowerCase().includes(input.toLowerCase())
-              }
+              filterOption={filterOptionByText}
               loading={loading}
             >
               {subCategories.map(sub => (

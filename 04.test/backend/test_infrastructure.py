@@ -1,5 +1,8 @@
+import runpy
+
 from app.config import Settings
 from app import database
+import uvicorn
 
 
 def test_database_url_uses_settings_values():
@@ -28,3 +31,19 @@ def test_get_db_closes_session(monkeypatch):
     assert next(dependency) is session
     dependency.close()
     assert session.closed is True
+
+
+def test_main_entrypoint_runs_uvicorn(monkeypatch):
+    """__main__ 开发入口应以配置中的端口启动 uvicorn"""
+    captured = {}
+
+    def fake_run(app_target, **kwargs):
+        captured["app"] = app_target
+        captured.update(kwargs)
+
+    monkeypatch.setattr(uvicorn, "run", fake_run)
+    runpy.run_module("app.main", run_name="__main__")
+
+    assert captured["app"] == "app.main:app"
+    assert captured["host"] == "0.0.0.0"
+    assert captured["port"] == Settings().API_PORT

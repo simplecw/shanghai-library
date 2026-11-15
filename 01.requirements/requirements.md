@@ -34,7 +34,9 @@
 - `call_number`：必填，最长 200 字符。
 - `isbn`：可选，最长 50 字符。
 - `douban_score`：可选，取值 0 到 10。
+- `remark`：可选，备注文本，无长度限制。
 - `category`、`sub_category`：可选，最长 100 字符。
+- `level`：可选，整数等级。
 - `normal_loan`、`reference_loan`、`wechat_read`、`borrow_status`、`is_deleted`：数据库使用 `Y/N`。
 - `page >= 1`，`1 <= page_size <= 100`。
 
@@ -44,7 +46,8 @@
 - MySQL 使用 `utf8mb4`，支持中文书名和备注。
 - 前后端可使用 Docker Compose 部署。
 - 数据库凭证只能通过环境变量注入，禁止写入仓库。
-- 后端测试不得依赖生产数据库，必须可重复、相互隔离。
+- 后端测试不得依赖生产数据库，必须可重复、相互隔离；前端测试不得依赖真实后端服务，所有网络请求均需 mock。
+- 后端与前端测试覆盖率均需达到 100%（语句、分支、函数、行）。
 
 ## 6. 当前限制
 

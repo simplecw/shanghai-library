@@ -1,4 +1,4 @@
-name: Backend tests
+name: Tests
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  backend:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -19,4 +19,19 @@ jobs:
           cache: pip
           cache-dependency-path: 03.src/backend/requirements-dev.txt
       - run: pip install -r requirements-dev.txt
-      - run: pytest ../../04.test/backend --cov=app --cov-report=term-missing --cov-fail-under=95
+      - run: pytest ../../04.test/backend --cov=app --cov-report=term-missing --cov-fail-under=100
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 03.src/frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: 03.src/frontend/package-lock.json
+      - run: npm ci
+      - run: npm run test:coverage
